@@ -1,0 +1,32 @@
+{
+  "id": "ce345679-6881-4f39-8d84-81ba2208c37d",
+  "name": "PMIS Temporary Customizations",
+  "publisher": "Adcirrus ERP",  
+  "version": "1.0.0.0",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "28.0.0.0",
+  "idRanges": [
+    {
+      "from": 52900,
+      "to": 52950
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "17.0",
+  "features": [
+    "NoImplicitWith"
+  ]
+}

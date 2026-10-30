@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Dev",
+            "request": "launch",
+            "type": "al",
+            "tenant": "56a71df1-bef0-4177-837d-1282ef71877f",
+            "environmentType": "Sandbox",
+            "environmentName": "Dev",
+            "startupObjectId": 22,
+            "startupObjectType": "Page",
+            "breakOnError": "All",
+            "launchBrowser": true,
+            "enableLongRunningSqlStatements": true,
+            "enableSqlInformationDebugger": true
+        }
+    ]
+}

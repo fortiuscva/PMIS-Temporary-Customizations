@@ -1,0 +1,34 @@
+{
+    "files.autoSave":  "onFocusChange",
+    "git.confirmSync":  false,
+    "CRS.ObjectNamePrefix":  "PMIS ",
+    "CRS.FileNamePattern":  "<ObjectTypeShort><ObjectId>.<ObjectNameShort>.al",
+    "CRS.FileNamePatternExtensions":  "<ObjectTypeShort><BaseId>-Ext<ObjectId>.<ObjectNameShort>.al",
+    "CRS.RemovePrefixFromFilename":  true,
+    "CRS.OnSaveAlFileAction":  "Rename",
+    "al.assemblyProbingPaths":  [
+                                    "./.netpackages",
+                                    "c:/Windows/assembly/"
+                                ],
+    "NAB.UseExternalTranslationTool":  true,
+    "alOutline.codeCleanupActions":  [
+                                         "RemoveWithStatements",
+                                         "AddApplicationAreas",
+                                         "FixIdentifiersCase",
+                                         "FixKeywordsCase",
+                                         "ConvertObjectIdsToNames",
+                                         "AddMissingParentheses",
+                                         "AddDataClassifications",
+                                         "RemoveUnusedVariables",
+                                         "SortProcedures",
+                                         "SortProperties",
+                                         "SortTableFields",
+                                         "SortVariables",
+                                         "RemoveEmptyTriggers",
+                                         "RemoveEmptyLines",
+                                         "RemoveEmptySections",
+                                         "FormatDocument",
+                                         "TrimTrailingWhitespace",
+                                         "MakeFlowFieldsReadOnly"
+                                     ]
+}
