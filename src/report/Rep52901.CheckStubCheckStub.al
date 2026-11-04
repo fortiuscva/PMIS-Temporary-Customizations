@@ -143,7 +143,11 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
             }
             dataitem(CheckPages; "Integer")
             {
-                DataItemTableView = sorting(Number);
+                // DataItemTableView = sorting(Number); //New Code.o
+                //New Code Start
+                DataItemTableView = sorting(Number)
+                        where(Number = filter(1 ..));
+                //New Code End
                 column(CheckToAddr_1_; CheckToAddr[1])
                 {
                 }
@@ -162,9 +166,11 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
                 column(CheckNoTextCaption; CheckNoTextCaptionLbl)
                 {
                 }
-                column(IsRemittanceContinuation; not (FoundLast and AddedRemainingAmount))
+                //New Code Start
+                column(SuppressInvoiceDetails; SuppressInvoiceDetails)
                 {
                 }
+                //New Code End
                 dataitem(PrintSettledLoop; "Integer")
                 {
                     DataItemTableView = sorting(Number);
@@ -221,9 +227,6 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
                     {
                     }
                     column(BankAccountNo; BankAccountNo)
-                    {
-                    }
-                    column(IsContinuationPage; not (FoundLast and AddedRemainingAmount))
                     {
                     }
                     trigger OnAfterGetRecord()
@@ -388,14 +391,57 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
                         Stub2LineAmount[Stub2LineNo] := LineAmount;
                         Stub2LineDiscount[Stub2LineNo] := LineDiscount;
                         Stub2PostingDesc[Stub2LineNo] := PostingDesc;
-                        ShowCheckSection := FoundLast and AddedRemainingAmount; //New Code.n
                         OnAfterOnAfterGetRecordOfPrintSettledLoop(GenJnlLine2, TotalLineAmount, CurrentLineAmount, TotalLineDiscount, LineDiscount, BalancingType, ApplyMethod, OneCheckPrVendor);
                     end;
 
                     trigger OnPreDataItem()
+                    var
+                        AppliedEntryCount: Integer; //New Code.n
                     begin
                         PrintCheckHelper.PrintSettledLoopHelper(CustLedgEntry, VendLedgEntry, GenJnlLine, BalancingType.AsInteger(), BalancingNo,
                           FoundLast, TestPrint, FirstPage, FoundNegative, ApplyMethod);
+
+                        //New Code Start 
+                        SuppressInvoiceDetails := false;
+                        AppliedEntryCount := 0;
+
+                        if (ApplyMethod = ApplyMethod::OneLineID) and not TestPrint then begin
+                            case BalancingType of
+                                BalancingType::Vendor:
+                                    AppliedEntryCount := VendLedgEntry.Count();
+
+                                BalancingType::Customer:
+                                    AppliedEntryCount := CustLedgEntry.Count();
+                            end;
+                            if AppliedEntryCount > 10 then begin
+                                SuppressInvoiceDetails := true;
+
+                                // Use the payment journal amount as the full check amount.
+                                TotalLineAmount := GenJnlLine.Amount;
+
+                                if TotalLineAmount < 0 then
+                                    TotalLineAmount := -TotalLineAmount;
+
+                                TotalLineDiscount := 0;
+                                RemainingAmount := 0;
+                                CurrentLineAmount := 0;
+                                LineAmount := 0;
+                                LineAmount2 := 0;
+                                LineDiscount := 0;
+
+                                FoundLast := true;
+                                AddedRemainingAmount := true;
+
+                                Clear(DocNo);
+                                Clear(ExtDocNo);
+                                Clear(DocDate);
+                                Clear(PostingDesc);
+
+                                // Do not generate any invoice-detail records.
+                                CurrReport.Break();
+                            end;
+                        end;
+                        //New Code End
 
                         if PreprintedStub then
                             TotalText := ''
@@ -885,12 +931,6 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
                     column(CheckNoText_Control1480000Caption; CheckNoText_Control1480000CaptionLbl)
                     {
                     }
-                    //New Code Start
-                    column(ShowCheckSection; ShowCheckSection)
-                    {
-                    }
-                    //New Code End                    
-
                     trigger OnAfterGetRecord()
                     var
                         CurrencySymbol: Code[5];
@@ -1015,22 +1055,13 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
 
                         OnAfterOnAfterGetRecordOfPrintCheck(GenJnlLine);
                     end;
-
-                    //New Code Start    
-                    trigger OnPreDataItem()
-                    begin
-                        // Do not print or create VOID checks for remittance continuation pages.
-                        if not (FoundLast and AddedRemainingAmount) then
-                            CurrReport.Break();
-                    end;
-                    //New Code End
                 }
 
                 trigger OnAfterGetRecord()
                 begin
                     if FoundLast and AddedRemainingAmount then
                         CurrReport.Break();
-                    ShowCheckSection := false; //New Code.n
+
                     if Number = 1 then begin //New Code.n
                         UseCheckNo := IncStr(UseCheckNo);
                         OnAfterIncStrCheckNo(UseCheckNo, GenJnlLine, CheckPages, PageNo);
@@ -1628,7 +1659,7 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
         Stub2NetAmountHeader: Text[30];
         Stub2PostingDescHeader: Text[30];
         DescriptionLine: array[2] of Text[80];
-        ShowCheckSection: Boolean; //New Code.n
+        SuppressInvoiceDetails: Boolean; //New Code.n
 
     local procedure CustUpdateAmounts(var CustLedgEntry2: Record "Cust. Ledger Entry"; RemainingAmount2: Decimal)
     var

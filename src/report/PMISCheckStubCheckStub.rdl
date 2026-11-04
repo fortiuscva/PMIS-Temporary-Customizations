@@ -3378,8 +3378,8 @@ End Function
         <Field Name="CheckNoTextCaption">
           <DataField>CheckNoTextCaption</DataField>
         </Field>
-        <Field Name="IsRemittanceContinuation">
-          <DataField>IsRemittanceContinuation</DataField>
+        <Field Name="SuppressInvoiceDetails">
+          <DataField>SuppressInvoiceDetails</DataField>
         </Field>
         <Field Name="PreprintedStub">
           <DataField>PreprintedStub</DataField>
@@ -3437,9 +3437,6 @@ End Function
         </Field>
         <Field Name="BankAccountNo">
           <DataField>BankAccountNo</DataField>
-        </Field>
-        <Field Name="IsContinuationPage">
-          <DataField>IsContinuationPage</DataField>
         </Field>
         <Field Name="PrnChkCheckToAddr_CheckStyle__CA_5_">
           <DataField>PrnChkCheckToAddr_CheckStyle__CA_5_</DataField>
@@ -3932,9 +3929,6 @@ End Function
         </Field>
         <Field Name="CheckNoText_Control1480000Caption">
           <DataField>CheckNoText_Control1480000Caption</DataField>
-        </Field>
-        <Field Name="ShowCheckSection">
-          <DataField>ShowCheckSection</DataField>
         </Field>
       </Fields>
       <Query>
