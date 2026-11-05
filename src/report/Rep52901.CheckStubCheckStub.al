@@ -30,7 +30,6 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
         {
             DataItemTableView = sorting("Journal Template Name", "Journal Batch Name", "Posting Date", "Document No.");
             RequestFilterFields = "Journal Template Name", "Journal Batch Name", "Posting Date";
-
             trigger OnAfterGetRecord()
             begin
                 CheckManagement.VoidCheck(VoidGenJnlLine);
@@ -63,7 +62,6 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
         dataitem(TestGenJnlLine; "Gen. Journal Line")
         {
             DataItemTableView = sorting("Journal Template Name", "Journal Batch Name", "Line No.");
-
             trigger OnAfterGetRecord()
             begin
                 if Amount = 0 then
@@ -141,6 +139,10 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
             column(GenJnlLine_Line_No_; "Line No.")
             {
             }
+            column(PMISAccountNo; Vend."Our Account No.") { }
+            column(PMISVendDescription; Vend.Name) { }
+            column(PMISPostingDate; "Posting Date") { }
+
             dataitem(CheckPages; "Integer")
             {
                 // DataItemTableView = sorting(Number); //New Code.o
@@ -1627,7 +1629,6 @@ report 52901 "PMIS Check (Stub/Check/Stub)"
         BlockedEmplForCheckErr: Label 'You cannot print check because employee %1 is blocked due to privacy.', Comment = '%1 - Employee no.';
 
     protected var
-
         PreprintedStub: Boolean;
         OneCheckPrVendor: Boolean;
         ApplyMethod: Option Payment,OneLineOneEntry,OneLineID,MoreLinesOneEntry;
